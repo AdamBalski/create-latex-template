@@ -1,5 +1,4 @@
 from string import Template
-
 def ask_for(param: str, type_of_param: type):
     if type_of_param == str:
         return input("Key in '%s': " % (param))
@@ -24,39 +23,39 @@ substitution_map["title"] = title
 substitution_map["author"] = author
 
 # polish language support
-pl = """\\usepackage[polish]{babel}
-\\usepackage{polski} """
+pl = r"""\usepackage[polish]{babel}
+\usepackage{polski} """
 substitution_map["pl"] = pl if include_pl_lang_support else ""
 
 # amsmath
-amsmath = "\\usepackage{amsmath}"
+amsmath = r"\usepackage{amsmath}"
 substitution_map["amsmath"] = amsmath if include_amsmath else ""
 
 # title page
-title_page = """\\begin{titlepage}
-    \\maketitle
-\\end{titlepage}""" if include_title_page else ""
+title_page = r"""\begin{titlepage}
+    \maketitle
+\end{titlepage}""" if include_title_page else ""
 substitution_map["title_page"] = title_page
 
 # table of contents
 toc = "\\tableofcontents\n\\newpage" if include_toc else ""
 substitution_map["toc"] = toc
 
-template = Template("""\\documentclass{article}
-\\usepackage[utf8]{inputenc}
+template = Template(r"""\documentclass{article}
+\usepackage[utf8]{inputenc}
 $pl
 $amsmath
 
-\\title{$title}
-\\author{$author}
+\title{$title}
+\author{$author}
 
-\\begin{document}
+\begin{document}
 $title_page
 $toc
 
 
 
-\\end{document}
+\end{document}
 """).substitute(substitution_map)
 
 print("\n\nBe aware that this will overwrite the file")
