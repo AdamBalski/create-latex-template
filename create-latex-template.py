@@ -13,6 +13,7 @@ title = ask_for("title", str)
 author = ask_for("author", str)
 include_pl_lang_support = ask_for("include_pl_lang_support", bool)
 include_amsmath = ask_for("include_amsmath", bool)
+include_inkscape = ask_for("include https://github.com/gillescastel/inkscape-figures support", bool)
 include_title_page = ask_for("include_title_page", bool)
 include_toc = ask_for("include_toc", bool)
 
@@ -31,6 +32,21 @@ substitution_map["pl"] = pl if include_pl_lang_support else ""
 amsmath = r"\usepackage{amsmath}"
 substitution_map["amsmath"] = amsmath if include_amsmath else ""
 
+# inkscape
+inkscape = r"""\usepackage{import}
+% Don't forget to run 'inkscape_figures watch' in cli in the same directory where your *.latex file resides
+\usepackage{pdfpages}
+\usepackage{transparent}
+\usepackage{xcolor}
+
+\newcommand{\incfig}[2][1]{%
+    \def\svgwidth{#1\columnwidth}
+    \import{./figures/}{#2.pdf_tex}
+}
+
+\pdfsuppresswarningpagegroup=1""" if include_inkscape else ""
+substitution_map["inkscape"] = inkscape
+
 # title page
 title_page = r"""\begin{titlepage}
     \maketitle
@@ -45,6 +61,7 @@ template = Template(r"""\documentclass{article}
 \usepackage[utf8]{inputenc}
 $pl
 $amsmath
+$inkscape
 
 \title{$title}
 \author{$author}
